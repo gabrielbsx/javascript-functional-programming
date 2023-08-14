@@ -47,11 +47,9 @@ function removeIfOnlyNumber(array) {
 function removeSymbolsFromTexts(symbols) {
   return function (array) {
     return array.map(el => {
-      let textWithoutSymbols = el
-      symbols.forEach(symbol => {
-        textWithoutSymbols = textWithoutSymbols.split(symbol).join('')
-      })
-      return textWithoutSymbols
+      return symbols.reduce((acc, symbol) => {
+        return acc.split(symbol).join('')
+      }, el)
     })
   }
 }
