@@ -65,8 +65,11 @@ const valorInicial = {
 }
 
 Array.prototype.myReduce = function (fn, acumulador) {
-  acumulador = acumulador ? acumulador : this[0]
   for (let i = 0; i < this.length; i ++) {
+    if (!acumulador && i === 0) {
+      acumulador = this[0]
+      continue
+    }
     acumulador = fn(acumulador, this[i], i, this)
   }
   return acumulador
