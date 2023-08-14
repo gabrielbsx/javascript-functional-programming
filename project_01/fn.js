@@ -5,9 +5,23 @@ function readDirectory(directory) {
   return new Promise((resolve, reject) => {
     fs.readdir(directory, {}, (err, files) => {
       if (err) reject(err)
-      resolve(files)
+      resolve(files.map((file) => path.join(directory, file)))
     })
   })
+}
+
+function readFile(filePath) {
+  return new Promise((resolve, reject) => {
+    fs.readFile(filePath, {}, (err, file) => {
+      if (err) reject(err)
+      const content = file.toString()
+      resolve(content)
+    })
+  })
+}
+
+function readFiles(filesPath) {
+  return Promise.all(filesPath.map(readFile))
 }
 
 function getArrayByEndsWithPattern(array, pattern) {
@@ -16,5 +30,7 @@ function getArrayByEndsWithPattern(array, pattern) {
 
 module.exports = {
   getArrayByEndsWithPattern,
+  readFile,
+  readFiles,
   readDirectory
 }
