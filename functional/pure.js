@@ -14,3 +14,9 @@ function generateRandomNumber(min, max) {
   const factor = max - min + 1
   return parseInt(Math.random() * factor) + min
 }
+
+let execs = 0
+function sum(a, b) {
+  execs++ // side effects
+  return a + b
+}
