@@ -24,13 +24,79 @@ function readFiles(filesPath) {
   return Promise.all(filesPath.map(readFile))
 }
 
-function getArrayByEndsWithPattern(array, pattern) {
-  return array.filter(el => el.endsWith(pattern))
+function getArrayByEndsWithPattern(pattern) {
+  return function (array) {
+    return array.filter(el => el.endsWith(pattern))
+  }
+}
+
+function removeEmptyLines(array) {
+  return array.filter(el => el.trim())
+}
+
+function removeIfIncludes(patternText) {
+  return function (array) {
+    return array.filter(el => !el.includes(patternText)) 
+  }
+}
+
+function removeIfOnlyNumber(array) {
+  return array.filter(line => isNaN(line.trim()))
+}
+
+function removeSymbolsFromTexts(symbols) {
+  return function (array) {
+    return array.map(el => {
+      let textWithoutSymbols = el
+      symbols.forEach(symbol => {
+        textWithoutSymbols = textWithoutSymbols.split(symbol).join('')
+      })
+      return textWithoutSymbols
+    })
+  }
+}
+
+const mergeElements = array => array.join(' ')
+
+function separateTextBySymbol(symbol) {
+  return function(content) {
+    return content.split(symbol)
+  }
+}
+
+function groupElements(elements) {
+  return Object.values(
+    elements.reduce((acc, element) => {
+      const el = element.toLowerCase()
+      const repeated = acc[el] ? acc[el].repeated + 1 : 1
+      acc[el] = {
+        element: el,
+        repeated
+      }
+      return acc
+    }, {})
+  )
+}
+
+function orderByNumericAttr(attr, sortBy = 'asc') {
+  return function (array) {
+    const asc = (obj1, obj2) => obj1[attr] - obj2[attr]
+    const desc = (obj1, obj2) => obj2[attr] - obj1[attr]
+    return array.sort(sortBy === 'desc' ? desc : asc)
+  }
 }
 
 module.exports = {
   getArrayByEndsWithPattern,
   readFile,
   readFiles,
-  readDirectory
+  readDirectory,
+  removeEmptyLines,
+  removeIfIncludes,
+  removeIfOnlyNumber,
+  removeSymbolsFromTexts,
+  mergeElements,
+  separateTextBySymbol,
+  groupElements,
+  orderByNumericAttr,
 }
