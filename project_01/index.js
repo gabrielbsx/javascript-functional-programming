@@ -20,6 +20,7 @@ const symbols = [
   '<i>', '</i>', '\r', '[', ']', '(', ')'
 ]
 
+// DRY principle
 readDirectory(subtitlesFolder)
   .then(getArrayByEndsWithPattern('.srt'))
   .then(readFiles)
